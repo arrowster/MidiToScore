@@ -1,15 +1,21 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+// Composables
+import { createRouter, createWebHistory } from 'vue-router'
+import Home from "../views/Home.vue"
 
-Vue.use(Router)
-
-export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+const routes = [
+  {
+    path: "/",
+    name: "home",
+    component: Home,
+    meta: {
+      title: 'MP3 To Midi'
     }
-  ]
+  },
+]
+
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
+  routes,
 })
+
+export default router
