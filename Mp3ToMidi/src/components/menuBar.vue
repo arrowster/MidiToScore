@@ -1,3 +1,5 @@
+// MenuBar    - 최종 수정 : 23/04/02 18:47 김지용 -
+
 <template>
   <v-app-bar color="green" elevation="4" rounded app>
     <v-app-bar-title>
@@ -12,7 +14,7 @@
 
 <script>
 export default {
-  name: "NavBar"
+  name: "MenuBar"
 }
 </script>
 

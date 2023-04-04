@@ -8,7 +8,7 @@
 </template>
 
 <script>
- import menuBar from "./components/menuBar"
+ import menuBar from "./components/MenuBar"
  export default {
    name: 'App',
    components: { menuBar },
