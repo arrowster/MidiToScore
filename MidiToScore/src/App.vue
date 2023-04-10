@@ -14,6 +14,7 @@
    components: { menuBar },
  }
 </script>
+
 <style lang="scss" scoped>
 .v-main{
   background-color: #E2C3C7; /* 링크의 색상 제거 */
