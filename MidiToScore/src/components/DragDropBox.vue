@@ -1,4 +1,4 @@
-// DragDropBox    - 최종 수정 : 23/04/13 14:59 김지용 -
+// DragDropBox    - 최종 수정 : 23/04/19  -
 
 <template>
   <div class="container">
@@ -25,14 +25,19 @@
           </div>
         </div>
         <div class="file-upload-list__item__btn-remove" @click="handleRemove(index)">
-          삭제
+          Delete
         </div>
       </div>
+    </div>
+    <!-- 파일 변환 보내기 -->
+    <div class="file-upload-list__item__btn-convert">
+      <v-btn block elevation="4" @click="uploadFiles()">Convert</v-btn>
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: "DragDropBox",
   data(){
@@ -75,6 +80,7 @@ export default {
         this.fileList.push(files[i])
       }
     },
+
     // FileReader를 통해 파일을 읽어 thumbnail 영역의 src 값으로 셋팅
     async readFiles (files) {
       return new Promise((resolve, reject) => {
@@ -87,6 +93,25 @@ export default {
     },
     handleRemove (index) {
       this.fileList.splice(index, 1)
+    },
+
+    //uploadFiles axios 파일 전송
+    uploadFiles() {
+      console.log('test')
+      const formData = new FormData();
+
+      this.fileList.forEach((file) => {
+        formData.append("selectedFiles", file);
+      });
+
+      axios({
+        method: "POST",
+        url: "/api/manager/upload",
+        data: formData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        }
+      });
     }
   }
 }
@@ -108,11 +133,15 @@ export default {
   border-radius: 20px;
   cursor: pointer;
   &.dragged {
-    border: 1px dashed powderblue;
+    border: 1px dashed rgba(192,192,192,0.3);
     opacity: .6;
   }
   &-container {
+    background-color: rgba(192,192,192,0.3);
+    border: 1px solid black;
+
     height: 300px;
+
     padding: 20px;
     margin: 0 auto;
     box-shadow: 0 0.625rem 1.25rem #0000001a;
@@ -141,13 +170,26 @@ export default {
       }
       &__btn-remove {
         cursor: pointer;
-        border: 1px solid powderblue;
+        background-color: rgba(192,192,192,0.3);
+        border: 1px solid black;
         display: flex;
         justify-content: center;
         align-items: center;
         padding: 5px;
         border-radius: 6px;
       }
+      &__btn-convert {
+        width: 500px;
+        color: black;
+        cursor: pointer;
+        border : none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 5px;
+        border-radius: 6px;
+      }
+
     }
   }
 }
