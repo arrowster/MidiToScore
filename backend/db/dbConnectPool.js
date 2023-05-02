@@ -1,20 +1,21 @@
 // dbConnectPool    - 최종 수정 : 23/04/02 06:29 김지용 -
 
 import mysql from 'mysql'
-let instance = null;
 import dotenv from 'dotenv'
 dotenv.config()
 
+let instance = null;
+
 class Database {
     constructor(){
-        if(instance) return instance;
-        instance = this;
+        if(instance) return instance
+        instance = this
         this.pool = mysql.createPool({
-                host: 'localhost',
-                port: 3306,
-                user: 'root',
-                password: '47594759',
-                database: 'music2',
+            host: process.env.DB_HOST,
+            port: process.env.DB_PORT,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
+            database: process.env.DB_SCHEMA,
         })
     }
     getConnection(callback) {
