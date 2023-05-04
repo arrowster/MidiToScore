@@ -14,24 +14,19 @@
       </div>
     </div>
     <!-- 파일 업로드 -->
-    <input type="file" ref="fileInput" class="file-upload-input" @change="onFileChange" multiple>
+    <input type="file" ref="fileInput" class="file-upload-input" @change="onFileChange" accept=".mid, .midi">
     <!-- 업로드된 리스트 -->
-    <div class="file-upload-list">
-      <div class="file-upload-list__item" v-for="(file, index) in fileList" :key="index">
-        <div class="file-upload-list__item__data">
-          <img class="file-upload-list__item__data-thumbnail" :src="file.src">
-          <div class="file-upload-list__item__data-name">
-            {{ file.name }}
-          </div>
-        </div>
-        <div class="file-upload-list__item__btn-remove" @click="handleRemove(index)">
-          Delete
-        </div>
+    <div class="file-info" v-if="selectedFile !== null">
+      <div class="name text-center mt-4 mb-2">
+        {{ selectedFile.name }}
       </div>
     </div>
     <!-- 파일 변환 보내기 -->
     <div class="file-upload-list__item__btn-convert">
-      <v-btn block elevation="4" @click="uploadFiles()">Convert</v-btn>
+      <v-btn block elevation="4" @click="uploadFile()">Convert</v-btn>
+    </div>
+    <div v-if="downloadFileUUID !== null" class="file-upload-list__item__btn-convert">
+      <v-btn block elevation="4" @click="downloadFile()">download PDF File</v-btn>
     </div>
   </div>
 </template>
@@ -43,7 +38,9 @@ export default {
   data(){
     return {
       isDragged: null,
-      fileList: []
+      fileList: [],
+      downloadFileUUID: null,
+      selectedFile: null,
     }
   },
   methods:{
@@ -67,18 +64,22 @@ export default {
       event.preventDefault()
       this.isDragged = false
       const files = event.dataTransfer.files
+      if (files.length > 1) {
+        return;
+      }
       this.addFiles(files)
     },
     onFileChange (event) {
-      const files = event.target.files
-      this.addFiles(files)
-    },
-    async addFiles (files) {
-      for(let i = 0; i < files.length; i++) {
-        const src = await this.readFiles(files[i])
-        files[i].src = src
-        this.fileList.push(files[i])
+      const file = event.target.files
+      if (file.length > 1) {
+        return;
       }
+      this.addFiles(file)
+    },
+    async addFiles (file) {
+      const src = await this.readFiles(file[0])
+      file[0].src = src
+      this.selectedFile = file[0]
     },
 
     // FileReader를 통해 파일을 읽어 thumbnail 영역의 src 값으로 셋팅
@@ -91,18 +92,14 @@ export default {
         reader.readAsDataURL(files)
       })
     },
-    handleRemove (index) {
-      this.fileList.splice(index, 1)
-    },
 
     //uploadFiles axios 파일 전송
-    uploadFiles() {
-      console.log('test')
+    uploadFile() {
+      if (this.selectedFile === null) {
+        return
+      }
       const formData = new FormData();
-
-      this.fileList.forEach((file) => {
-        formData.append("selectedFiles", file);
-      });
+      formData.append("selectedFile", this.selectedFile);
 
       axios({
         method: "POST",
@@ -111,7 +108,36 @@ export default {
         headers: {
           "Content-Type": "multipart/form-data",
         }
+      }).then(response => {
+        if (response.status === 200) {
+          this.downloadFileUUID = response.data
+          this.$emit('update', `/api/manager/download/${this.downloadFileUUID}`)
+        } else {
+          this.downloadFileUUID = null
+        }
       });
+    },
+    downloadFile() {
+      if (this.downloadFileUUID === null) {
+        return;
+      }
+      axios.get(`/api/manager/download/${this.downloadFileUUID}`, {
+        responseType: "blob",
+      }).then(response => {
+        if (response.status === 200) {
+          const name = response.headers["content-disposition"]
+            .split("filename=")[1]
+            .replace(/"/g, "");
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", name);
+          link.style.cssText = "display:none";
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+        }
+      })
     }
   }
 }

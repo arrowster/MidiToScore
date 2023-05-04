@@ -1,7 +1,7 @@
 // MusicScoreViewer    - 최종 수정 : 23/04/13 14:59 김지용 -
 
 <template>
-  <v-container>
+  <v-container v-if="pdf">
     <div class="justify-center">
       <v-btn class="ma-4" @click="pagePrev">Prev</v-btn>
       <div class="mt-6"> {{currentPage}} / {{pages}} </div>
@@ -19,18 +19,28 @@ import { ref } from 'vue'
 
 export default {
   name: "MusicScoreViewer",
-
+  props: {
+    fileUrl: {
+      type: String,
+      default: null,
+    },
+  },
+  data() {
+    return {
+      pdf: null,
+      pages: 0,
+      currentPage: 0,
+    }
+  },
   components: {
     VuePDF
   },
-  setup() {
-    let pdfUrl = "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/web/compressed.tracemonkey-pldi-09.pdf"
-    const currentPage = ref(1)
-    const { pdf, pages } = usePDF(pdfUrl)
-    return {
-      pdf,
-      pages,
-      currentPage
+  watch : {
+    fileUrl(newValue, oldValue) {
+      this.currentPage = ref(1)
+      const pdf = usePDF(newValue)
+      this.pdf = pdf.pdf
+      this.pages = pdf.pages
     }
   },
   methods: {
