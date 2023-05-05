@@ -1,12 +1,17 @@
 .DS_Store
+.sql
 node_modules
 /dist
 
+#midi To score program
+#https://github.com/BYVoid/MidiToSheetMusic //github homePage
+MidiToSheet.exe
+
 # midi, png, pdf files
-.mid
-.MID
-.png
-.pdf
+*.mid
+*.MID
+*.png
+*.pdf
 
 # local env files
 .env.local

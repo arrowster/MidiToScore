@@ -5,7 +5,7 @@
     <div class="justify-center">
       <v-btn class="ma-4" @click="pagePrev">Prev</v-btn>
       <div class="mt-6"> {{currentPage}} / {{pages}} </div>
-      <v-btn class="ma-4" @click="pageNext">Next</v-btn>
+      <v-btn class="ma-4"  @click="pageNext">Next</v-btn>
     </div>
     <div class="justify-center">
       <VuePDF :pdf="pdf" :page="currentPage" />

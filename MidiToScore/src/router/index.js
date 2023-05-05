@@ -6,10 +6,7 @@ const routes = [
   {
     path: "/",
     name: "home",
-    component: Home,
-    meta: {
-      title: 'MP3 To Midi'
-    }
+    component: Home
   },
 ]
 

@@ -1,18 +1,18 @@
-// DragDropBox    - 최종 수정 : 23/04/19  -
+// DragDropBox    - 최종 수정 : 23/05/06  -
 
 <template>
   <div class="container">
-    <div class="file-upload-container"
-         @dragenter="onDragenter"
-         @dragover="onDragover"
-         @dragleave="onDragleave"
-         @drop="onDrop"
-         @click="onClick"
-    >
-      <div class="file-upload" :class="isDragged ? 'dragged' : ''">
-        Drag & Drop Files
-      </div>
-    </div>
+      <v-card class="file-upload-container mt-4"
+          @dragenter="onDragenter"
+          @dragover="onDragover"
+          @dragleave="onDragleave"
+          @drop="onDrop"
+          @click="onClick"
+      >
+        <div class="file-upload" :class="isDragged ? 'dragged' : ''">
+          Drag & Drop Midi File(.mid) Plz...
+        </div>
+      </v-card>
     <!-- 파일 업로드 -->
     <input type="file" ref="fileInput" class="file-upload-input" @change="onFileChange" accept=".mid, .midi">
     <!-- 업로드된 리스트 -->
@@ -26,7 +26,7 @@
       <v-btn block elevation="4" @click="uploadFile()">Convert</v-btn>
     </div>
     <div v-if="downloadFileUUID !== null" class="file-upload-list__item__btn-convert">
-      <v-btn block elevation="4" @click="downloadFile()">download PDF File</v-btn>
+      <v-btn block elevation="4" @click="downloadFile()">Download PDF File</v-btn>
     </div>
   </div>
 </template>
@@ -144,6 +144,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.v-btn {
+  background-color: #F7E0D3;
+}
 .container {
   min-height: 300px;
   width: 500px;
@@ -164,9 +167,8 @@ export default {
   }
   &-container {
     background-color: rgba(192,192,192,0.3);
-    border: 1px solid black;
 
-    height: 300px;
+    height: 240px;
 
     padding: 20px;
     margin: 0 auto;

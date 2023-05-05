@@ -1,5 +1,5 @@
 const { spawn } = require('child_process')
-const { jsPDF } = require('jspdf') //midi를 악보로 변환함
+const { jsPDF } = require('jspdf')
 const fs = require('fs')
 
 const midiToPdf = (fileName, uuid) => {
@@ -24,7 +24,6 @@ const midiToScore = async (fileName) => {
     return new Promise((resolve, reject) => {
         let scoreCounter = 0
         const midiToSheetProcess = spawn('MidiToSheet.exe', [`./storage/${fileName}`, `./storage/${fileName}`])
-        console.log('변환시작')
         midiToSheetProcess.stdout.on('data', (data) => {
             const output = data.toString().trim();
             console.log(`stdout: ${output}`)

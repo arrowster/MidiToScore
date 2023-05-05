@@ -21,7 +21,7 @@ let storage = multer.diskStorage({
 let upload = multer({ storage: storage });
 
 router.post('/upload', upload.array('selectedFile'), function(req, res, next) {
-    //todo: 파일받은거 처리
+    //파일받은거 처리
     const fileName = req.files[0].originalname
     console.log(fileName)
     const fileUUID = v4()
@@ -39,8 +39,8 @@ router.post('/upload', upload.array('selectedFile'), function(req, res, next) {
                         resolve(true)
                     }
                 });
-                conn.release()   //db객체 반환
-            })   // getConnection
+                conn.release()
+            })
         }).then(success => {
             if (!success) {
                 return res.status(401).send('not found');
@@ -55,7 +55,7 @@ router.get('/download/:uuid', function(req, res, next) {
         return res.status(404).send('not found');
     }
     new Promise((resolve, reject) => {
-        db.getConnection((conn) => {   // getConnection 메소드 사용
+        db.getConnection((conn) => {
             conn.query('SELECT name from storage where uuid = ?', [req.params.uuid], function(err, row) {
                 if (err || !row || typeof row[0] === 'undefined') {
                     resolve([false, undefined])
@@ -63,8 +63,8 @@ router.get('/download/:uuid', function(req, res, next) {
                     resolve([true, row[0].name])
                 }
             });
-            conn.release()   //db객체 반환
-        })   // getConnection
+            conn.release()
+        })
     }).then(([success, fileName]) => {
         if (!success) {
             return res.status(401).send('not found');

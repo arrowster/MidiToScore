@@ -4,12 +4,12 @@
   <v-app-bar color="#5F7EAF" elevation="4" rounded app>
     <v-app-bar-title>
       <router-link to="/">
-        <v-icon icon="mdi-book-music"/> Midi To MusicScore
+        <v-icon icon="mdi-book-music"/> Midi To Music Score
       </router-link>
     </v-app-bar-title>
     <v-spacer/>
     <span class="mr-2">
-			test
+			Ver. Dev
 		</span>
   </v-app-bar>
 </template>

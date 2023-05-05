@@ -7,7 +7,6 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 import indexRouter from './routes/index.js';
-import usersRouter from './routes/users.js';
 import managerRouter from "./routes/manager.js";
 
 const app = express();
@@ -24,10 +23,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use('/manager', managerRouter);
 
-console.log('서버 킴')
+console.log('서버 ON')
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,1 +1,3 @@
-git upload
+this folder is save MusicScore(.pdf)
+storage folder is save need file(.png, .midi) to midi => musicScore
+thx
